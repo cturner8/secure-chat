@@ -10,6 +10,10 @@
     "supabase": "supabase"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.8.1",
+    "@supabase/auth-ui-react": "^0.4.5",
+    "@supabase/auth-ui-shared": "^0.1.7",
+    "@supabase/supabase-js": "^2.36.0",
     "@types/node": "18.x",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
@@ -24,6 +28,10 @@
     "typescript": "5.2.2"
   },
   "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.6",
+    "@tailwindcss/typography": "^0.5.10",
     "supabase": "^1.99.5"
   }
 }
