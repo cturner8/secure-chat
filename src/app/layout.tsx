@@ -1,11 +1,12 @@
+import { Navigation } from "@/components/navigation";
 import "@/lib/logger";
 import { AuthProvider } from "@/providers/auth-provider";
 import clsx from "clsx";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Secure Chat",
@@ -19,8 +20,10 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={clsx(inter.className, "bg-neutral text-white")}>
-        <AuthProvider>{children}</AuthProvider>
+      <body className={clsx(font.className, "bg-neutral text-white")}>
+        <AuthProvider>
+          <Navigation>{children}</Navigation>
+        </AuthProvider>
       </body>
     </html>
   );
