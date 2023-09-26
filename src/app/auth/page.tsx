@@ -5,12 +5,12 @@ import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import dynamic from "next/dynamic";
 
-const NoSSR = dynamic(() => import("@/components/NoSSR"), { ssr: false });
+const NoSSR = dynamic(() => import("@/components/no-ssr"), { ssr: false });
 
 export default function Page() {
   return (
     <NoSSR>
-      <main className="flex min-h-screen flex-col items-center justify-center bg-neutral">
+      <main className="flex min-h-screen flex-col items-center justify-center">
         <Auth
           supabaseClient={supabase}
           appearance={{ theme: ThemeSupa }}
