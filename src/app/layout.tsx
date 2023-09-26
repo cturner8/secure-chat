@@ -1,3 +1,5 @@
+import "@/lib/logger";
+import { AuthProvder } from "@/providers/auth-provider";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -10,15 +12,15 @@ export const metadata: Metadata = {
   description: "The safest way to chat",
 };
 
-export default function RootLayout({
-  children,
-}: {
+type Props = {
   children: React.ReactNode;
-}) {
+};
+
+export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={clsx(inter.className, "bg-neutral text-white")}>
-        {children}
+        <AuthProvder>{children}</AuthProvder>
       </body>
     </html>
   );

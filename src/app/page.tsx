@@ -1,13 +1,12 @@
-"use server";
+"use client";
 
-import { supabase } from "@/lib/supabase/server";
-import { redirect } from "next/navigation";
+import { useAuthContext } from "@/providers/auth-provider";
 
-export default async function Home() {
-  const session = await supabase.auth.getSession();
-  if (!session) {
-    redirect("/auth");
-  }
-
-  return <main>Logged in!</main>;
+export default function Home() {
+  const { user } = useAuthContext();
+  return (
+    <main>
+      <p>Hello, {user?.email}</p>
+    </main>
+  );
 }
