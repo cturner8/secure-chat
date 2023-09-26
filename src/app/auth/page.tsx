@@ -2,13 +2,16 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { useAuthContext } from "@/providers/auth-provider";
+import { theme } from "@/styles/tailwindTheme";
 import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { ThemeSupa, minimal } from "@supabase/auth-ui-shared";
 import dynamic from "next/dynamic";
 import { redirect } from "next/navigation";
 import { useEffect } from "react";
 
 const NoSSR = dynamic(() => import("@/components/no-ssr"), { ssr: false });
+
+const primaryColor = theme.colors?.["primary"].toString();
 
 export default function Page() {
   const { user } = useAuthContext();
@@ -21,12 +24,26 @@ export default function Page() {
   return (
     <NoSSR>
       <main className="flex min-h-screen flex-col items-center justify-center">
-        <Auth
-          supabaseClient={supabase}
-          appearance={{ theme: ThemeSupa }}
-          theme="dark"
-          providers={["github"]}
-        />
+        <div className="w-1/5 bg-black-950 rounded-md text-center">
+          <h1>Secure Chat</h1>
+          <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    ...minimal,
+                    brand: primaryColor,
+                    brandAccent: primaryColor,
+                  },
+                },
+              },
+            }}
+            providers={["github"]}
+            theme="dark"
+          />
+        </div>
       </main>
     </NoSSR>
   );
