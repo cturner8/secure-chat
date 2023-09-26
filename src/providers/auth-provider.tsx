@@ -13,7 +13,7 @@ type AuthContext = {
 
 const [Provider, useAuthContext] = createCtx<AuthContext>("AuthProvider");
 
-export const AuthProvder = ({ children }: PropsWithChildren) => {
+export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(() => null);
 
   useEffect(() => {
@@ -21,8 +21,11 @@ export const AuthProvder = ({ children }: PropsWithChildren) => {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       logger.debug("onAuthStateChange", { event, session });
-      if (!session) return;
-      setUser(session.user);
+      if (session) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
     });
     return () => {
       subscription.unsubscribe();

@@ -1,5 +1,5 @@
 import "@/lib/logger";
-import { AuthProvder } from "@/providers/auth-provider";
+import { AuthProvider } from "@/providers/auth-provider";
 import clsx from "clsx";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -20,7 +20,7 @@ export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
       <body className={clsx(inter.className, "bg-neutral text-white")}>
-        <AuthProvder>{children}</AuthProvder>
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );
