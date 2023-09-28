@@ -26,7 +26,6 @@ export const getUserKeys = async (userId: string) => {
     const privateKey = await userKeyStore.getItem<CryptoKey>(
       `${userId}.private`,
     );
-    if (!publicKey || !privateKey) throw new Error("User keys not found");
     return Promise.resolve({ publicKey, privateKey });
   } catch (e) {
     console.error("Error getting user keys:", e);
