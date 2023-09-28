@@ -37,13 +37,10 @@ export class Encryption {
   };
 
   public exportKey = async (key: Key) => {
-    const jwk = await jose.exportJWK(key);
-    return this.toBase64(jwk);
+    return jose.exportJWK(key);
   };
 
-  public importKey = async (jwkString: string) => {
-    const jwk = this.fromBase64<JWK>(jwkString);
-    const key = await jose.importJWK(jwk, this.alg);
-    return key;
+  public importKey = async (jwk: JWK) => {
+    return jose.importJWK(jwk, this.alg);
   };
 }

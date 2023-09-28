@@ -19,6 +19,21 @@ const encryption = new RsaEncryption();
 
 const [Provider, useAuthContext] = createCtx<AuthContext>("AuthProvider");
 
+const saveUserPublicKey = async (user_id: string, publicKey: CryptoKey) => {
+  try {
+    const publicJwk = await encryption.exportKey(publicKey);
+    const { error } = await supabase.from("UserPublicKeys").insert({
+      user_id,
+      public_key: publicJwk as any,
+    });
+    if (error) {
+      console.error(error);
+    }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
 export const AuthProvider = ({ children }: PropsWithChildren) => {
   const [user, setUser] = useState<User | null>(() => null);
   const [publicKey, setPublicKey] = useState<CryptoKey | null>(() => null);
@@ -59,6 +74,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
           setPublicKey(newKeyPair.publicKey);
           setPrivateKey(newKeyPair.privateKey);
           saveUserKeys(user.id, newKeyPair.publicKey, newKeyPair.privateKey);
+          saveUserPublicKey(user.id, newKeyPair.publicKey);
         });
       });
     } catch (e) {}
