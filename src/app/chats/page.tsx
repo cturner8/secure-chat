@@ -14,8 +14,8 @@ export default async function Page() {
   const { data } = await supabase
     .from("Chats")
     .select("*, ChatMembers(id)")
-    .eq("ChatMembers.user_id", user.id);
-
+    .eq("ChatMembers.user_id", user.id)
+    .order("updated_at", { ascending: false });
   chats = data ?? [];
 
   return (

@@ -1,3 +1,5 @@
+"use client";
+
 import localforage from "localforage";
 
 const DB_NAME = "secure-chat";

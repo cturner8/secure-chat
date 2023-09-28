@@ -1,3 +1,5 @@
+"use client";
+
 import { DB_NAME, localforage } from "./store";
 
 const userKeyStore = localforage.createInstance({
