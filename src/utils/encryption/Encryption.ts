@@ -1,7 +1,7 @@
-import type { GeneralJWE, JWK, KeyLike } from "jose";
+import type { GeneralJWE, JWK } from "jose";
 import * as jose from "jose";
 
-export type Key = KeyLike | Uint8Array;
+export type Key = CryptoKey | Uint8Array;
 
 export class Encryption {
   constructor(protected alg: string, protected enc: string) {}
@@ -11,10 +11,10 @@ export class Encryption {
   private fromBase64 = <O extends object>(input: string) =>
     JSON.parse(atob(input)) as O;
 
-  generateKey = async () =>
-    jose.generateSecret(this.alg, { extractable: true });
+  public generateKey = async () =>
+    jose.generateSecret<CryptoKey>(this.alg, { extractable: true });
 
-  encrypt = async (plaintext: string, key: Key): Promise<string> => {
+  public encrypt = async (plaintext: string, key: Key): Promise<string> => {
     const jwe = await new jose.GeneralEncrypt(
       new TextEncoder().encode(plaintext),
     )
@@ -27,7 +27,7 @@ export class Encryption {
     return outputJwe;
   };
 
-  decrypt = async (outputJwe: string, key: Key): Promise<string> => {
+  public decrypt = async (outputJwe: string, key: Key): Promise<string> => {
     const jwe = this.fromBase64<GeneralJWE>(outputJwe);
     const decrypted = await jose.generalDecrypt(jwe, key);
     const decoder = new TextDecoder();
@@ -36,12 +36,12 @@ export class Encryption {
     return plaintext;
   };
 
-  exportKey = async (key: Key) => {
+  public exportKey = async (key: Key) => {
     const jwk = await jose.exportJWK(key);
     return this.toBase64(jwk);
   };
 
-  importKey = async (jwkString: string) => {
+  public importKey = async (jwkString: string) => {
     const jwk = this.fromBase64<JWK>(jwkString);
     const key = await jose.importJWK(jwk, this.alg);
     return key;
