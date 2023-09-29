@@ -6,9 +6,9 @@ export type Key = CryptoKey | Uint8Array;
 export class Encryption {
   constructor(protected alg: string, protected enc: string) {}
 
-  protected toBase64 = (input: object) => btoa(JSON.stringify(input));
+  public toBase64 = (input: object) => btoa(JSON.stringify(input));
 
-  protected fromBase64 = <O extends object>(input: string) =>
+  public fromBase64 = <O extends object>(input: string) =>
     JSON.parse(atob(input)) as O;
 
   public generateKey = async () =>
@@ -41,6 +41,6 @@ export class Encryption {
   };
 
   public importKey = async (jwk: JWK) => {
-    return jose.importJWK(jwk, this.alg);
+    return jose.importJWK<CryptoKey>(jwk, this.alg);
   };
 }

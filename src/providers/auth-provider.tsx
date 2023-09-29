@@ -15,13 +15,13 @@ type AuthContext = {
   privateKey: CryptoKey | null;
 };
 
-const encryption = new RsaEncryption();
+const rsa = new RsaEncryption();
 
 const [Provider, useAuthContext] = createCtx<AuthContext>("AuthProvider");
 
 const saveUserPublicKey = async (user_id: string, publicKey: CryptoKey) => {
   try {
-    const publicJwk = await encryption.exportKey(publicKey);
+    const publicJwk = await rsa.exportKey(publicKey);
     const { error } = await supabase.from("UserPublicKeys").insert({
       user_id,
       public_key: publicJwk as any,
@@ -70,7 +70,7 @@ export const AuthProvider = ({ children }: PropsWithChildren) => {
         }
 
         // create and save a new keypair
-        encryption.generateKeyPair().then((newKeyPair) => {
+        rsa.generateKeyPair().then((newKeyPair) => {
           setPublicKey(newKeyPair.publicKey);
           setPrivateKey(newKeyPair.privateKey);
           saveUserKeys(user.id, newKeyPair.publicKey, newKeyPair.privateKey);
