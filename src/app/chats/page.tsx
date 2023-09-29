@@ -2,27 +2,26 @@
 
 import { supabase } from "@/lib/supabase/server";
 
-import type { Database } from "@/lib/database.types";
 import { getAuthUser } from "@/utils/getAuthUser";
-
-type Chat = Database["public"]["Tables"]["Chats"]["Row"];
+import Link from "next/link";
 
 export default async function Page() {
   const user = await getAuthUser();
 
-  let chats: Chat[] = [];
   const { data } = await supabase
     .from("Chats")
     .select("*, ChatMembers(id)")
     .eq("ChatMembers.user_id", user.id)
     .order("updated_at", { ascending: false });
-  chats = data ?? [];
+  const chats = data ?? [];
 
   return (
     <>
-      <ul>
+      <ul className="flex flex-col">
         {chats.map((chat) => (
-          <li key={chat.id}>{chat.name}</li>
+          <Link key={chat.id} href={`/chats/${chat.id}`}>
+            {chat.name}
+          </Link>
         ))}
       </ul>
     </>
