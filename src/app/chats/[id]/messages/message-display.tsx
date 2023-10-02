@@ -1,27 +1,27 @@
 "use client";
 
-import type { ChatKey } from "@/hooks/useChatKey";
+import { useChatContext } from "@/providers/chat-provider";
 import type { ChatMessage } from "@/types/database";
 import { AesEncryption } from "@/utils/encryption";
 import { useEffect, useState } from "react";
 
 interface Props {
-  jwk: ChatKey;
   chatMessage: ChatMessage;
 }
 type Component = (props: Props) => JSX.Element;
 
 const aes = new AesEncryption();
 
-export const MessageDisplay: Component = ({ jwk, chatMessage }) => {
+export const MessageDisplay: Component = ({ chatMessage }) => {
   const { id, message } = chatMessage;
+  const { jwk } = useChatContext();
 
   const [decryptedMessage, setDecryptedMessage] = useState<string | null>(
     () => null,
   );
 
   useEffect(() => {
-    if (!message) return;
+    if (!message || !jwk) return;
     aes
       .decrypt(message, jwk)
       .then((plaintext) => setDecryptedMessage(plaintext));

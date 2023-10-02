@@ -1,6 +1,6 @@
 "use client";
 
-import { useChatKey } from "@/hooks/useChatKey";
+import { ChatProvider } from "@/providers/chat-provider";
 import type { Chat, ChatMessage } from "@/types/database";
 import { ChatDetails } from "./details";
 import { ChatMessages } from "./messages";
@@ -13,13 +13,10 @@ interface Props {
 type Component = (props: Props) => JSX.Element;
 
 export const ChatDisplay: Component = ({ chat, messages, chatKey }) => {
-  const jwk = useChatKey(chatKey);
-  if (!jwk) return <p>Loading...</p>;
-
   return (
-    <>
-      <ChatDetails chat={chat} chatKey={chatKey} />
-      <ChatMessages chatId={chat.id} jwk={jwk} messages={messages} />
-    </>
+    <ChatProvider chatKey={chatKey} chat={chat} messages={messages}>
+      <ChatDetails />
+      <ChatMessages />
+    </ChatProvider>
   );
 };
