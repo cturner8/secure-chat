@@ -85,7 +85,7 @@ const createChat = async (formData: FormData) => {
     ]);
   }
 
-  redirect("/chats");
+  redirect(`/chats/${chat.id}/messages`);
 };
 
 export default function Page() {

@@ -25,7 +25,8 @@ export const ChatMessages: Component = () => {
 
       e.preventDefault();
 
-      const formData = new FormData(e.currentTarget);
+      const form = e.currentTarget;
+      const formData = new FormData(form);
 
       const message = formData.get("message")?.toString() ?? "";
 
@@ -36,6 +37,8 @@ export const ChatMessages: Component = () => {
         sender_id: user.id,
         chat_id: chatId,
       });
+
+      form.reset();
     } catch (e) {
       console.error(e);
     }
@@ -52,6 +55,7 @@ export const ChatMessages: Component = () => {
           placeholder="Type a message..."
         />
         <button type="submit">Send</button>
+        <button type="reset">Reset</button>
       </form>
       <MessageList />
     </>

@@ -1,20 +1,35 @@
 "use client";
 
 import { ChatProvider } from "@/providers/chat-provider";
-import type { Chat, ChatMessageWithSender } from "@/types/database";
+import type {
+  Chat,
+  ChatMemberWithProfile,
+  ChatMessage,
+} from "@/types/database";
 import { ChatDetails } from "./details";
 import { ChatMessages } from "./messages";
 
 interface Props {
   chatKey: string;
   chat: Chat;
-  messages: ChatMessageWithSender[];
+  messages: ChatMessage[];
+  members: ChatMemberWithProfile[];
 }
 type Component = (props: Props) => JSX.Element;
 
-export const ChatDisplay: Component = ({ chat, messages, chatKey }) => {
+export const ChatDisplay: Component = ({
+  chat,
+  messages,
+  chatKey,
+  members,
+}) => {
   return (
-    <ChatProvider chatKey={chatKey} chat={chat} messages={messages}>
+    <ChatProvider
+      chatKey={chatKey}
+      chat={chat}
+      messages={messages}
+      members={members}
+    >
       <ChatDetails />
       <ChatMessages />
     </ChatProvider>

@@ -3,18 +3,27 @@
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { useDecrypt } from "@/hooks/useDecrypt";
 import { useChatContext } from "@/providers/chat-provider";
-import type { ChatMessageWithSender } from "@/types/database";
+import type { ChatMemberWithProfile, ChatMessage } from "@/types/database";
 import clsx from "clsx";
 import { useMemo } from "react";
 
 interface Props {
-  chatMessage: ChatMessageWithSender;
+  chatMessage: ChatMessage;
 }
 type Component = (props: Props) => JSX.Element;
 
+const displaySender = (
+  senderId: string | null,
+  members: ChatMemberWithProfile[],
+) => {
+  const sender = members.find((member) => member.user_id === senderId);
+  if (!sender) return "";
+  return sender.profile.email;
+};
+
 export const MessageDisplay: Component = ({ chatMessage }) => {
-  const { id, message, sender_id, sender } = chatMessage;
-  const { jwk } = useChatContext();
+  const { id, message, sender_id } = chatMessage;
+  const { jwk, members } = useChatContext();
   const user = useAuthUser();
 
   const decryptedMessage = useDecrypt(jwk, message);
@@ -24,7 +33,7 @@ export const MessageDisplay: Component = ({ chatMessage }) => {
   if (decryptedMessage == null) return <></>;
   return (
     <>
-      {!isSender && <p>{sender.email}</p>}
+      {!isSender && <p>{displaySender(sender_id, members)}</p>}
       <p
         key={id}
         className={clsx(

@@ -10,3 +10,7 @@ export type ChatMessage = Database["public"]["Tables"]["ChatMessages"]["Row"];
 export type ChatMessageWithSender = ChatMessage & {
   sender: Pick<UserProfile, "email" | "firstname" | "lastname">;
 };
+export type ChatMember = Database["public"]["Tables"]["ChatMembers"]["Row"];
+export type ChatMemberWithProfile = Pick<ChatMember, "user_id"> & {
+  profile: Pick<UserProfile, "email" | "firstname" | "lastname">;
+};
