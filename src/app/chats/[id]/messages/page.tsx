@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase/server";
+import { ChatMessageWithSender } from "@/types/database";
 import { getAuthUser } from "@/utils/getAuthUser";
 import { notFound } from "next/navigation";
 import { ChatDisplay } from "./chat-display";
@@ -21,9 +22,10 @@ export default async function Page({ params }: Props) {
   }
   const { data: messageData } = await supabase
     .from("ChatMessages")
-    .select("*")
+    .select("*, sender:sender_id(email, firstname, lastname)")
     .order("created_at", { ascending: true })
-    .eq("chat_id", id);
+    .eq("chat_id", id)
+    .returns<ChatMessageWithSender[]>();
   const { data: userChatKey } = await supabase
     .from("UserChatKeys")
     .select("key")

@@ -10,7 +10,7 @@ export const MessageList: Component = () => {
   const { messages } = useChatContext();
   return (
     <>
-      <div className="flex flex-col gap-4 h-full w-full overflow-auto">
+      <div className="flex flex-col gap-4 h-full w-full overflow-auto my-6">
         {messages.map((message) => (
           <MessageDisplay key={message.id} chatMessage={message} />
         ))}

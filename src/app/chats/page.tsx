@@ -2,28 +2,25 @@
 
 import { supabase } from "@/lib/supabase/server";
 
+import type { ChatWithKey } from "@/types/database";
 import { getAuthUser } from "@/utils/getAuthUser";
-import Link from "next/link";
+import { ChatList } from "./chat-list";
 
 export default async function Page() {
   const user = await getAuthUser();
 
   const { data } = await supabase
     .from("Chats")
-    .select("*, ChatMembers(id)")
+    .select("*, ChatMembers(id), chatKey:UserChatKeys(key)")
     .eq("ChatMembers.user_id", user.id)
-    .order("updated_at", { ascending: false });
+    .eq("UserChatKeys.user_id", user.id)
+    .order("updated_at", { ascending: false })
+    .returns<ChatWithKey[]>();
   const chats = data ?? [];
 
   return (
     <>
-      <ul className="flex flex-col">
-        {chats.map((chat) => (
-          <Link key={chat.id} href={`/chats/${chat.id}/messages`}>
-            {chat.name}
-          </Link>
-        ))}
-      </ul>
+      <ChatList chats={chats} />
     </>
   );
 }

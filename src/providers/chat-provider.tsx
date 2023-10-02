@@ -1,19 +1,19 @@
 import { useChatKey, type ChatKey } from "@/hooks/useChatKey";
 import { createCtx } from "@/lib/createCtx";
-import type { Chat, ChatMessage } from "@/types/database";
+import type { Chat, ChatMessageWithSender } from "@/types/database";
 import { useCallback, useMemo, type PropsWithChildren } from "react";
 
 type ChatContext = {
   jwk: ChatKey | null;
   getJwk: () => ChatKey;
   chat: Chat;
-  messages: ChatMessage[];
+  messages: ChatMessageWithSender[];
 };
 
 type Props = {
   chatKey: string;
   chat: Chat;
-  messages: ChatMessage[];
+  messages: ChatMessageWithSender[];
 };
 
 const [Provider, useChatContext] = createCtx<ChatContext>("ChatProvider");

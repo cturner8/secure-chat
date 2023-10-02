@@ -63,7 +63,7 @@ export interface Database {
           {
             foreignKeyName: "ChatAdmins_user_id_fkey";
             columns: ["user_id"];
-            referencedRelation: "users";
+            referencedRelation: "UserProfiles";
             referencedColumns: ["id"];
           },
         ];
@@ -97,7 +97,7 @@ export interface Database {
           {
             foreignKeyName: "ChatMembers_user_id_fkey";
             columns: ["user_id"];
-            referencedRelation: "users";
+            referencedRelation: "UserProfiles";
             referencedColumns: ["id"];
           },
         ];
@@ -137,7 +137,7 @@ export interface Database {
           {
             foreignKeyName: "ChatMessages_sender_id_fkey";
             columns: ["sender_id"];
-            referencedRelation: "users";
+            referencedRelation: "UserProfiles";
             referencedColumns: ["id"];
           },
         ];
@@ -195,6 +195,40 @@ export interface Database {
           {
             foreignKeyName: "UserChatKeys_user_id_fkey";
             columns: ["user_id"];
+            referencedRelation: "UserProfiles";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
+      UserProfiles: {
+        Row: {
+          created_at: string;
+          email: string | null;
+          firstname: string | null;
+          id: string;
+          lastname: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          created_at?: string;
+          email?: string | null;
+          firstname?: string | null;
+          id: string;
+          lastname?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          created_at?: string;
+          email?: string | null;
+          firstname?: string | null;
+          id?: string;
+          lastname?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "UserProfiles_id_fkey";
+            columns: ["id"];
             referencedRelation: "users";
             referencedColumns: ["id"];
           },
@@ -223,7 +257,7 @@ export interface Database {
           {
             foreignKeyName: "UserPublicKeys_user_id_fkey";
             columns: ["user_id"];
-            referencedRelation: "users";
+            referencedRelation: "UserProfiles";
             referencedColumns: ["id"];
           },
         ];

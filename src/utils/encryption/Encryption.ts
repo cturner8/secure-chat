@@ -14,7 +14,11 @@ export class Encryption {
   public generateKey = async () =>
     jose.generateSecret<CryptoKey>(this.alg, { extractable: true });
 
-  public encrypt = async (plaintext: string, key: Key): Promise<string> => {
+  public encrypt = async (
+    input: string | object,
+    key: Key,
+  ): Promise<string> => {
+    const plaintext = typeof input === "string" ? input : this.toBase64(input);
     const jwe = await new jose.GeneralEncrypt(
       new TextEncoder().encode(plaintext),
     )

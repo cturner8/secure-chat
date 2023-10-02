@@ -3,6 +3,7 @@ import { supabase as supabaseAdmin } from "@/lib/supabase/admin";
 import { AesEncryption, RsaEncryption } from "@/utils/encryption";
 import { getAuthUser } from "@/utils/getAuthUser";
 import { getUserPublicKey } from "@/utils/getUserPublicKey";
+import type { JWK } from "jose";
 import { redirect } from "next/navigation";
 
 const aes = new AesEncryption();
@@ -10,17 +11,42 @@ const rsa = new RsaEncryption();
 
 export const dynamic = "force-dynamic";
 
+const encryptUserChatKey = async (
+  chatId: string,
+  userId: string,
+  chatJwk: JWK,
+) => {
+  // get the user public key
+  const userPublicKey = await getUserPublicKey(userId);
+  // encrypt the chat key for the user using their public key
+  const encryptedChatKey = await rsa.encrypt(chatJwk, userPublicKey);
+  // save encrypted key in user chat keys table
+  return supabaseAdmin.from("UserChatKeys").insert({
+    chat_id: chatId,
+    user_id: userId,
+    key: encryptedChatKey,
+  });
+};
+
 const createChat = async (formData: FormData) => {
   "use server";
 
   const user = await getAuthUser();
 
   const name = formData.get("name")?.toString();
+  const recipient = formData.get("recipient")?.toString();
+
+  // generate symmetric encryption key
+  const chatKey = await aes.generateKey();
+  const chatJwk = await aes.exportKey(chatKey);
+
+  // encrypt the input name, if provided
+  const encryptedName = name ? await aes.encrypt(name, chatKey) : undefined;
 
   const { data, error } = await supabaseAdmin
     .from("Chats")
     .insert({
-      name,
+      name: encryptedName,
     })
     .select();
 
@@ -29,29 +55,34 @@ const createChat = async (formData: FormData) => {
   }
   const [chat] = data ?? [];
 
+  const memberUserIds = [user.id];
+
+  if (recipient) {
+    const { data: chatMembers } = await supabaseAdmin
+      .from("UserProfiles")
+      .select("id")
+      .eq("email", recipient);
+    if (chatMembers) {
+      memberUserIds.push(...chatMembers.map((member) => member.id));
+    }
+  }
+
   if (chat) {
-    await supabaseAdmin.from("ChatMembers").insert({
-      chat_id: chat.id,
-      user_id: user.id,
-    });
+    await Promise.all([
+      ...memberUserIds.map((userId) =>
+        supabaseAdmin.from("ChatMembers").insert({
+          chat_id: chat.id,
+          user_id: userId,
+        }),
+      ),
+    ]);
 
-    // generate symmetric encryption key
-    const chatKey = await aes.generateKey();
-    const chatJwk = await aes.exportKey(chatKey);
-
-    // encrypt using user's public key
-    const userPublicKey = await getUserPublicKey(user.id);
-    const encryptedChatKey = await rsa.encrypt(
-      aes.toBase64(chatJwk),
-      userPublicKey,
-    );
-
-    // save in user chat keys table
-    await supabaseAdmin.from("UserChatKeys").insert({
-      chat_id: chat.id,
-      user_id: user.id,
-      key: encryptedChatKey,
-    });
+    // encrypt the chat key for each member user
+    await Promise.all([
+      ...memberUserIds.map(async (userId) =>
+        encryptUserChatKey(chat.id, userId, chatJwk),
+      ),
+    ]);
   }
 
   redirect("/chats");
@@ -66,6 +97,10 @@ export default function Page() {
           Chat Name
         </label>
         <input name="name" type="text" className="text-black" />
+        <label id="name" htmlFor="name">
+          Recipient Email
+        </label>
+        <input name="recipient" type="text" className="text-black" />
         <button type="submit">Save</button>
       </form>
     </>
