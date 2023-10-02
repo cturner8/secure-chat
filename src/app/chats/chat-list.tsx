@@ -1,5 +1,6 @@
 "use client";
 
+import { Header } from "@/components/header";
 import type { ChatWithKey } from "@/types/database";
 import { ChatLink } from "./chat-link";
 
@@ -11,7 +12,8 @@ type Component = (props: Props) => JSX.Element;
 export const ChatList: Component = ({ chats }) => {
   return (
     <>
-      <ul className="flex flex-col">
+      <Header text="My Chats" />
+      <ul className="flex flex-col text-xl">
         {chats.map((chat) => (
           <ChatLink key={chat.id} chat={chat} />
         ))}

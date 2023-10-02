@@ -46,18 +46,22 @@ export const ChatMessages: Component = () => {
 
   return (
     <>
-      <h1>Messages</h1>
-      <form className="flex flex-col" onSubmit={onSubmit}>
+      <MessageList />
+      <form
+        className="flex flex-row justify-between rounded-md focus:outline-none bg-gray-100 border-gray-300 w-full"
+        onSubmit={onSubmit}
+      >
         <input
           name="message"
           type="text"
-          className="text-black"
           placeholder="Type a message..."
+          className="bg-transparent border-none w-11/12"
         />
-        <button type="submit">Send</button>
-        <button type="reset">Reset</button>
+        <div>
+          <button type="submit">Send</button>
+          <button type="reset">Reset</button>
+        </div>
       </form>
-      <MessageList />
     </>
   );
 };

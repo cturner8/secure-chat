@@ -10,12 +10,12 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Open Sans Regular", ...defaultTheme.fontFamily.sans],
+        sans: ["Jost Regular", ...defaultTheme.fontFamily.sans],
       },
       colors: {
-        primary: "#07004D",
-        secondary: "#2D82B7",
-        neutral: "#40434E",
+        primary: "#8ECAE6",
+        secondary: "#219EBC",
+        neutral: "#023047",
       },
     },
   },

@@ -17,7 +17,7 @@ export const ChatLink: Component = ({ chat }) => {
 
   if (decryptedChatName == null) return <></>;
   return (
-    <Link key={chat.id} href={`/chats/${chat.id}/messages`}>
+    <Link key={chat.id} href={`/chats/${chat.id}/messages`} className="h-24">
       {decryptedChatName}
     </Link>
   );

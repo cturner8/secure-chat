@@ -3,10 +3,10 @@ import "@/lib/logger";
 import { AuthProvider } from "@/providers/auth-provider";
 import clsx from "clsx";
 import type { Metadata } from "next";
-import { Open_Sans } from "next/font/google";
+import { Jost } from "next/font/google";
 import "./globals.css";
 
-const font = Open_Sans({ subsets: ["latin"] });
+const font = Jost({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Secure Chat",
@@ -26,7 +26,7 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={clsx(font.className, "bg-neutral text-white")}>
+      <body className={clsx(font.className, "bg-white")}>
         <AuthProvider>
           <Navigation>{children}</Navigation>
         </AuthProvider>

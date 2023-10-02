@@ -96,11 +96,11 @@ export default function Page() {
         <label id="name" htmlFor="name">
           Chat Name
         </label>
-        <input name="name" type="text" className="text-black" />
+        <input name="name" type="text" />
         <label id="name" htmlFor="name">
           Recipient Email
         </label>
-        <input name="recipient" type="text" className="text-black" />
+        <input name="recipient" type="text" />
         <button type="submit">Save</button>
       </form>
     </>

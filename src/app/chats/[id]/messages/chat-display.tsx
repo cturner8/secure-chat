@@ -6,7 +6,6 @@ import type {
   ChatMemberWithProfile,
   ChatMessage,
 } from "@/types/database";
-import { ChatDetails } from "./details";
 import { ChatMessages } from "./messages";
 
 interface Props {
@@ -30,7 +29,6 @@ export const ChatDisplay: Component = ({
       messages={messages}
       members={members}
     >
-      <ChatDetails />
       <ChatMessages />
     </ChatProvider>
   );

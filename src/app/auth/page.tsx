@@ -12,6 +12,7 @@ import { useEffect } from "react";
 const NoSSR = dynamic(() => import("@/components/no-ssr"), { ssr: false });
 
 const primaryColor = theme.colors?.["primary"].toString();
+const fontFamily = theme.fontFamily?.["sans"].toString();
 
 export default function Page() {
   const { user } = useAuthContext();
@@ -32,6 +33,12 @@ export default function Page() {
               theme: ThemeSupa,
               variables: {
                 default: {
+                  fonts: {
+                    bodyFontFamily: fontFamily,
+                    buttonFontFamily: fontFamily,
+                    inputFontFamily: fontFamily,
+                    labelFontFamily: fontFamily,
+                  },
                   colors: {
                     ...minimal,
                     brand: primaryColor,
@@ -41,7 +48,6 @@ export default function Page() {
               },
             }}
             providers={["github"]}
-            theme="dark"
           />
         </div>
       </main>

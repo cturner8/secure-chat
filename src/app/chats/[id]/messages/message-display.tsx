@@ -38,8 +38,8 @@ export const MessageDisplay: Component = ({ chatMessage }) => {
         key={id}
         className={clsx(
           isSender ? "text-right" : "text-left",
-          "border border-white p-4 rounded-md",
-          isSender && "border-secondary",
+          "p-4 rounded-md",
+          isSender ? "bg-primary" : "bg-gray-100",
         )}
       >
         {decryptedMessage}
