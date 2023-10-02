@@ -22,7 +22,7 @@ export default async function Page({ params }: Props) {
   const { data: messageData } = await supabase
     .from("ChatMessages")
     .select("*")
-    .order("created_at", { ascending: false })
+    .order("created_at", { ascending: true })
     .eq("chat_id", id);
   const { data: userChatKey } = await supabase
     .from("UserChatKeys")
