@@ -19,7 +19,7 @@ export default async function Page() {
     <>
       <ul className="flex flex-col">
         {chats.map((chat) => (
-          <Link key={chat.id} href={`/chats/${chat.id}`}>
+          <Link key={chat.id} href={`/chats/${chat.id}/messages`}>
             {chat.name}
           </Link>
         ))}

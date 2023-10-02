@@ -8,12 +8,14 @@ import { redirect } from "next/navigation";
 const aes = new AesEncryption();
 const rsa = new RsaEncryption();
 
+export const dynamic = "force-dynamic";
+
 const createChat = async (formData: FormData) => {
   "use server";
 
   const user = await getAuthUser();
 
-  const name = formData.get("name")?.valueOf().toString();
+  const name = formData.get("name")?.toString();
 
   const { data, error } = await supabaseAdmin
     .from("Chats")

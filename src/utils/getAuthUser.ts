@@ -1,5 +1,7 @@
 import { supabase } from "@/lib/supabase/server";
 
+export const dynamic = "force-dynamic";
+
 export const getAuthUser = async () => {
   const {
     data: { session },

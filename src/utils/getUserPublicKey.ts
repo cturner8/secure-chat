@@ -4,6 +4,8 @@ import { AesEncryption } from "./encryption";
 
 const aes = new AesEncryption();
 
+export const dynamic = "force-dynamic";
+
 export const getUserPublicKey = async (userId: string) => {
   const { data, error } = await supabase
     .from("UserPublicKeys")

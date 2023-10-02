@@ -2,6 +2,7 @@ import { supabase } from "@/lib/supabase/server";
 import { getAuthUser } from "@/utils/getAuthUser";
 import { notFound } from "next/navigation";
 import { ChatDetails } from "./details";
+import { ChatMessages } from "./messages";
 
 type Props = { params: { id: string } };
 
@@ -26,9 +27,12 @@ export default async function Page({ params }: Props) {
     .eq("user_id", user.id)
     .single();
 
+  const chatKey = userChatKey?.key ?? "";
+
   return (
     <>
-      <ChatDetails chat={chat} chatKey={userChatKey?.key ?? ""} />
+      <ChatDetails chat={chat} chatKey={chatKey} />
+      <ChatMessages chatId={chat.id} chatKey={chatKey} />
     </>
   );
 }

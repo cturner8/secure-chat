@@ -40,7 +40,8 @@ export class Encryption {
     return jose.exportJWK(key);
   };
 
-  public importKey = async (jwk: JWK) => {
+  public importKey = async (key: JWK | string) => {
+    const jwk = typeof key === "string" ? this.fromBase64<JWK>(key) : key;
     return jose.importJWK<CryptoKey>(jwk, this.alg);
   };
 }
