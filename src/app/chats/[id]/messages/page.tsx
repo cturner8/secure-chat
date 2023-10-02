@@ -1,8 +1,7 @@
 import { supabase } from "@/lib/supabase/server";
 import { getAuthUser } from "@/utils/getAuthUser";
 import { notFound } from "next/navigation";
-import { ChatDetails } from "./details";
-import { ChatMessages } from "./messages";
+import { ChatDisplay } from "./chat-display";
 
 type Props = { params: { id: string } };
 
@@ -20,6 +19,11 @@ export default async function Page({ params }: Props) {
   if (!chat) {
     return notFound();
   }
+  const { data: messageData } = await supabase
+    .from("ChatMessages")
+    .select("*")
+    .order("created_at", { ascending: false })
+    .eq("chat_id", id);
   const { data: userChatKey } = await supabase
     .from("UserChatKeys")
     .select("key")
@@ -28,11 +32,7 @@ export default async function Page({ params }: Props) {
     .single();
 
   const chatKey = userChatKey?.key ?? "";
+  const messages = messageData ?? [];
 
-  return (
-    <>
-      <ChatDetails chat={chat} chatKey={chatKey} />
-      <ChatMessages chatId={chat.id} chatKey={chatKey} />
-    </>
-  );
+  return <ChatDisplay chatKey={chatKey} chat={chat} messages={messages} />;
 }

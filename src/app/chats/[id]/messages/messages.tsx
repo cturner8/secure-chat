@@ -1,23 +1,24 @@
 "use client";
 
 import { useAuthUser } from "@/hooks/useAuthUser";
-import { useUserKeys } from "@/hooks/userUserKeys";
+import { ChatKey } from "@/hooks/useChatKey";
 import { supabase } from "@/lib/supabase/client";
-import { AesEncryption, RsaEncryption } from "@/utils/encryption";
+import { ChatMessage } from "@/types/database";
+import { AesEncryption } from "@/utils/encryption";
 import type { FormEventHandler } from "react";
+import { MessageList } from "./message-list";
 
 interface Props {
+  jwk: ChatKey;
   chatId: string;
-  chatKey: string;
+  messages: ChatMessage[];
 }
 type Component = (props: Props) => JSX.Element;
 
 const aes = new AesEncryption();
-const rsa = new RsaEncryption();
 
-export const ChatMessages: Component = ({ chatId, chatKey }) => {
+export const ChatMessages: Component = ({ chatId, jwk, messages }) => {
   const user = useAuthUser();
-  const { privateKey } = useUserKeys();
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     try {
@@ -27,8 +28,6 @@ export const ChatMessages: Component = ({ chatId, chatKey }) => {
 
       const message = formData.get("message")?.toString() ?? "";
 
-      const decryptedChatKey = await rsa.decrypt(chatKey, privateKey);
-      const jwk = await aes.importKey(decryptedChatKey);
       const encryptedMessage = await aes.encrypt(message, jwk);
 
       await supabase.from("ChatMessages").insert({
@@ -53,6 +52,7 @@ export const ChatMessages: Component = ({ chatId, chatKey }) => {
         />
         <button type="submit">Send</button>
       </form>
+      <MessageList messages={messages} jwk={jwk} />
     </>
   );
 };

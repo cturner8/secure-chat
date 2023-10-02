@@ -1,8 +1,6 @@
 "use client";
 
-import type { Database } from "@/lib/database.types";
-
-type Chat = Database["public"]["Tables"]["Chats"]["Row"];
+import { Chat } from "@/types/database";
 
 interface Props {
   chat: Chat;
