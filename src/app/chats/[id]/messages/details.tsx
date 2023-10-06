@@ -10,7 +10,7 @@ export const ChatDetails: Component = () => {
   const { chat, jwk } = useChatContext();
   const decryptedChatName = useDecrypt(jwk, chat.name);
 
-  if (decryptedChatName == null) return <></>;
+  if (decryptedChatName === null) return <></>;
   return (
     <>
       <h1>{decryptedChatName}</h1>

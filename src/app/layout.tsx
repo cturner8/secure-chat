@@ -26,7 +26,7 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html lang="en">
-      <body className={clsx(font.className, "bg-white")}>
+      <body className={clsx(font.className, "bg-white h-screen w-screen")}>
         <AuthProvider>
           <Navigation>{children}</Navigation>
         </AuthProvider>

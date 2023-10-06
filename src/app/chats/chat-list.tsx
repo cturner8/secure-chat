@@ -14,14 +14,14 @@ type Component = (props: Props) => JSX.Element;
 
 export const ChatList: Component = ({ chats }) => {
   return (
-    <div className="w-1/5">
-      <div className="flex flex-row justify-between items-center">
+    <div className="w-full">
+      <div className="flex flex-row justify-between items-center content-center mb-4">
         <Header text="My Chats" />
         <Link href="/chats/new">
           <Image src={Pencil} alt="new chat pencil" className="w-9 h-9" />
         </Link>
       </div>
-      <ul className="flex flex-col text-xl">
+      <ul className="flex flex-col text-xl gap-3">
         {chats.map((chat) => (
           <ChatLink key={chat.id} chat={chat} />
         ))}

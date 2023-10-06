@@ -1,3 +1,5 @@
+import { Header } from "@/components/header";
+import { PageHeader } from "@/components/page-header";
 import { logger } from "@/lib/logger";
 import { supabase as supabaseAdmin } from "@/lib/supabase/admin";
 import { AesEncryption, RsaEncryption } from "@/utils/encryption";
@@ -91,15 +93,15 @@ const createChat = async (formData: FormData) => {
 export default function Page() {
   return (
     <>
-      <h1 className="mb-4">New Chat</h1>
-      <form className="flex flex-col gap-2" action={createChat}>
+      <PageHeader text="New Chat" />
+      <form className="flex flex-col gap-2 p-4" action={createChat}>
         <label id="name" htmlFor="name">
           Chat Name
         </label>
         <input
           name="name"
           type="text"
-          className="rounded-md mb-4 focus:outline-none bg-gray-100 border-gray-300"
+          className="rounded-md mb-4 focus:outline-none bg-white border-gray-300"
         />
         <label id="name" htmlFor="name">
           Recipient Email
@@ -107,7 +109,7 @@ export default function Page() {
         <input
           name="recipient"
           type="text"
-          className="rounded-md mb-4 focus:outline-none bg-gray-100 border-gray-300"
+          className="rounded-md mb-4 focus:outline-none bg-white border-gray-300"
         />
         <button type="submit" className="rounded-md bg-primary h-10 text-white">
           Save

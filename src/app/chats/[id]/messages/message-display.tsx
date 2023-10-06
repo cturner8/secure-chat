@@ -30,7 +30,7 @@ export const MessageDisplay: Component = ({ chatMessage }) => {
 
   const isSender = useMemo(() => sender_id === user.id, [sender_id, user.id]);
 
-  if (decryptedMessage == null) return <></>;
+  if (decryptedMessage === null) return <></>;
   return (
     <>
       {!isSender && <p>{displaySender(sender_id, members)}</p>}
@@ -39,7 +39,7 @@ export const MessageDisplay: Component = ({ chatMessage }) => {
         className={clsx(
           isSender ? "text-right" : "text-left",
           "p-4 rounded-md",
-          isSender ? "bg-primary" : "bg-gray-100",
+          isSender ? "bg-primary" : "bg-white",
         )}
       >
         {decryptedMessage}

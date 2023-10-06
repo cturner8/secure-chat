@@ -8,9 +8,5 @@ type Props = {
 
 export default function Page({ children }: Props) {
   useAuthUser();
-  return (
-    <main>
-      <div>{children}</div>
-    </main>
-  );
+  return <>{children}</>;
 }
