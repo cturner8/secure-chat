@@ -1,9 +1,12 @@
 "use client";
 
+import Send from "@/assets/send.svg";
+import Undo from "@/assets/undo.svg";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { supabase } from "@/lib/supabase/client";
 import { useChatContext } from "@/providers/chat-provider";
 import { AesEncryption } from "@/utils/encryption";
+import Image from "next/image";
 import type { FormEventHandler } from "react";
 import { MessageList } from "./message-list";
 
@@ -48,7 +51,7 @@ export const ChatMessages: Component = () => {
     <>
       <MessageList />
       <form
-        className="flex flex-row justify-between rounded-md focus:outline-none bg-gray-100 border-gray-300 w-full"
+        className="flex flex-row justify-between rounded-md focus:outline-none bg-gray-100 border-gray-300 w-full p-2"
         onSubmit={onSubmit}
       >
         <input
@@ -57,9 +60,13 @@ export const ChatMessages: Component = () => {
           placeholder="Type a message..."
           className="bg-transparent border-none w-11/12"
         />
-        <div>
-          <button type="submit">Send</button>
-          <button type="reset">Reset</button>
+        <div className="w-full flex flex-row justify-end px-2 gap-2">
+          <button type="reset">
+            <Image src={Undo} alt="undo" />
+          </button>
+          <button type="submit">
+            <Image src={Send} alt="send message" />
+          </button>
         </div>
       </form>
     </>

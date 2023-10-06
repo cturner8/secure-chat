@@ -92,16 +92,26 @@ export default function Page() {
   return (
     <>
       <h1 className="mb-4">New Chat</h1>
-      <form className="flex flex-col" action={createChat}>
+      <form className="flex flex-col gap-2" action={createChat}>
         <label id="name" htmlFor="name">
           Chat Name
         </label>
-        <input name="name" type="text" />
+        <input
+          name="name"
+          type="text"
+          className="rounded-md mb-4 focus:outline-none bg-gray-100 border-gray-300"
+        />
         <label id="name" htmlFor="name">
           Recipient Email
         </label>
-        <input name="recipient" type="text" />
-        <button type="submit">Save</button>
+        <input
+          name="recipient"
+          type="text"
+          className="rounded-md mb-4 focus:outline-none bg-gray-100 border-gray-300"
+        />
+        <button type="submit" className="rounded-md bg-primary h-10 text-white">
+          Save
+        </button>
       </form>
     </>
   );
