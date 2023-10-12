@@ -3,6 +3,11 @@ import * as jose from "jose";
 
 export type Key = CryptoKey | Uint8Array;
 
+export enum OutputFormat {
+  Base64,
+  Json,
+}
+
 export class Encryption {
   constructor(protected alg: string, protected enc: string) {}
 
@@ -14,10 +19,22 @@ export class Encryption {
   public generateKey = async () =>
     jose.generateSecret<CryptoKey>(this.alg, { extractable: true });
 
-  public encrypt = async (
+  public encrypt(input: string | object, key: Key): Promise<string>;
+  public encrypt(
     input: string | object,
     key: Key,
-  ): Promise<string> => {
+    format: OutputFormat.Base64,
+  ): Promise<string>;
+  public encrypt(
+    input: string | object,
+    key: Key,
+    format: OutputFormat.Json,
+  ): Promise<GeneralJWE>;
+  public async encrypt(
+    input: string | object,
+    key: Key,
+    format: OutputFormat = OutputFormat.Base64,
+  ): Promise<string | GeneralJWE> {
     const plaintext = typeof input === "string" ? input : this.toBase64(input);
     const jwe = await new jose.GeneralEncrypt(
       new TextEncoder().encode(plaintext),
@@ -26,19 +43,24 @@ export class Encryption {
       .addRecipient(key)
       .setUnprotectedHeader({ alg: this.alg })
       .encrypt();
-    const outputJwe = this.toBase64(jwe);
 
-    return outputJwe;
-  };
+    switch (format) {
+      case OutputFormat.Base64:
+        return this.toBase64(jwe);
+      case OutputFormat.Json:
+      default:
+        return jwe;
+    }
+  }
 
-  public decrypt = async (outputJwe: string, key: Key): Promise<string> => {
+  public async decrypt(outputJwe: string, key: Key): Promise<string> {
     const jwe = this.fromBase64<GeneralJWE>(outputJwe);
     const decrypted = await jose.generalDecrypt(jwe, key);
     const decoder = new TextDecoder();
 
     const plaintext = decoder.decode(decrypted.plaintext);
     return plaintext;
-  };
+  }
 
   public exportKey = async (key: Key) => {
     return jose.exportJWK(key);

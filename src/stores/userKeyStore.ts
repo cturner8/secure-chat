@@ -1,5 +1,6 @@
 "use client";
 
+import { logger } from "@/lib/logger";
 import { DB_NAME, localforage } from "./store";
 
 const userKeyStore = localforage.createInstance({
@@ -17,7 +18,7 @@ export const saveUserKeys = async (
     await userKeyStore.setItem(`${userId}.private`, privateKey);
     return Promise.resolve();
   } catch (e) {
-    console.error("Error saving user keys:", e);
+    logger.error("Error saving user keys:", e);
     return Promise.reject(e);
   }
 };
@@ -30,7 +31,7 @@ export const getUserKeys = async (userId: string) => {
     );
     return Promise.resolve({ publicKey, privateKey });
   } catch (e) {
-    console.error("Error getting user keys:", e);
+    logger.error("Error getting user keys:", e);
     return Promise.reject(e);
   }
 };

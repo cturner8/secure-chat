@@ -27,10 +27,10 @@ const saveUserPublicKey = async (user_id: string, publicKey: CryptoKey) => {
       public_key: publicJwk as any,
     });
     if (error) {
-      console.error(error);
+      logger.error(error);
     }
   } catch (e) {
-    console.error(e);
+    logger.error(e);
   }
 };
 
