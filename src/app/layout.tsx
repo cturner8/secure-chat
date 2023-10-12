@@ -11,12 +11,6 @@ const font = Jost({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Secure Chat",
   description: "The safest way to chat",
-  icons: [
-    {
-      type: "icon",
-      url: "./favicon.ico",
-    },
-  ],
 };
 
 type Props = {
