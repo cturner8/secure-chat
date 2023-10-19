@@ -1,6 +1,6 @@
 import { supabase } from "@/lib/supabase/client";
 import { useChatContext } from "@/providers/chat-provider";
-import type { ChatMessage } from "@/types/database";
+import type { ChatMessage, ChatMessageWithFiles } from "@/types/database";
 import { useEffect, useState } from "react";
 
 export const useChatMessages = () => {
@@ -17,8 +17,9 @@ export const useChatMessages = () => {
       },
       (payload) => {
         if (!("id" in payload.new)) return;
-        const newMessage: ChatMessage = {
+        const newMessage: ChatMessageWithFiles = {
           ...payload.new,
+          files: [], // TODO
         };
         setChatMessages((prev) => [...prev, newMessage]);
       },

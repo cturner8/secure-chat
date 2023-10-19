@@ -53,13 +53,41 @@ export class Encryption {
     }
   }
 
-  public async decrypt(outputJwe: string, key: Key): Promise<string> {
-    const jwe = this.fromBase64<GeneralJWE>(outputJwe);
+  public async decrypt(
+    outputJwe: string | GeneralJWE,
+    key: Key,
+  ): Promise<string>;
+  public async decrypt(
+    outputJwe: string | GeneralJWE,
+    key: Key,
+    format: OutputFormat.Base64,
+  ): Promise<string>;
+  public async decrypt(
+    outputJwe: string | GeneralJWE,
+    key: Key,
+    format: OutputFormat.Json,
+  ): Promise<object>;
+  public async decrypt(
+    outputJwe: string | GeneralJWE,
+    key: Key,
+    format: OutputFormat = OutputFormat.Base64,
+  ): Promise<string | object> {
+    const jwe =
+      typeof outputJwe === "string"
+        ? this.fromBase64<GeneralJWE>(outputJwe)
+        : outputJwe;
     const decrypted = await jose.generalDecrypt(jwe, key);
     const decoder = new TextDecoder();
 
     const plaintext = decoder.decode(decrypted.plaintext);
-    return plaintext;
+
+    switch (format) {
+      case OutputFormat.Json:
+        return this.fromBase64(plaintext);
+      case OutputFormat.Base64:
+      default:
+        return plaintext;
+    }
   }
 
   public exportKey = async (key: Key) => {

@@ -7,6 +7,11 @@ export type ChatWithKey = Chat & {
   chatKey: Array<Pick<UserChatKey, "key">>;
 };
 export type ChatMessage = Database["public"]["Tables"]["ChatMessages"]["Row"];
+export type ChatMessageFiles =
+  Database["public"]["Tables"]["ChatMessageFiles"]["Row"];
+export type ChatMessageWithFiles = ChatMessage & {
+  files: Array<Pick<ChatMessageFiles, "path">>;
+};
 export type ChatMessageWithSender = ChatMessage & {
   sender: Pick<UserProfile, "email" | "firstname" | "lastname">;
 };

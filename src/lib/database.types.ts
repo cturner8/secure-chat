@@ -102,6 +102,46 @@ export interface Database {
           },
         ];
       };
+      ChatMessageFiles: {
+        Row: {
+          chat_id: string | null;
+          created_at: string;
+          id: string;
+          message_id: string | null;
+          path: string | null;
+          updated_at: string | null;
+        };
+        Insert: {
+          chat_id?: string | null;
+          created_at?: string;
+          id?: string;
+          message_id?: string | null;
+          path?: string | null;
+          updated_at?: string | null;
+        };
+        Update: {
+          chat_id?: string | null;
+          created_at?: string;
+          id?: string;
+          message_id?: string | null;
+          path?: string | null;
+          updated_at?: string | null;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "ChatMessageFiles_chat_id_fkey";
+            columns: ["chat_id"];
+            referencedRelation: "Chats";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "ChatMessageFiles_message_id_fkey";
+            columns: ["message_id"];
+            referencedRelation: "ChatMessages";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       ChatMessages: {
         Row: {
           chat_id: string | null;

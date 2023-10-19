@@ -4,14 +4,14 @@ import { ChatProvider } from "@/providers/chat-provider";
 import type {
   Chat,
   ChatMemberWithProfile,
-  ChatMessage,
+  ChatMessageWithFiles,
 } from "@/types/database";
 import { ChatMessages } from "./messages";
 
 interface Props {
   chatKey: string;
   chat: Chat;
-  messages: ChatMessage[];
+  messages: ChatMessageWithFiles[];
   members: ChatMemberWithProfile[];
 }
 type Component = (props: Props) => JSX.Element;

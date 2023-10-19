@@ -10,10 +10,8 @@ import { useDecrypt } from "@/hooks/useDecrypt";
 import { logger } from "@/lib/logger";
 import { supabase } from "@/lib/supabase/client";
 import { useChatContext } from "@/providers/chat-provider";
-import { createFileBlob } from "@/utils/createFileBlob";
 import { AesEncryption } from "@/utils/encryption";
-import { OutputFormat } from "@/utils/encryption/Encryption";
-import { readFileData } from "@/utils/readFile";
+import { encryptFile } from "@/utils/fileCrypto";
 import clsx from "clsx";
 import Image from "next/image";
 import { useState, type FormEventHandler } from "react";
@@ -24,13 +22,6 @@ interface Props {}
 type Component = (props: Props) => JSX.Element;
 
 const aes = new AesEncryption();
-
-type FileJson = {
-  payload: string;
-  metadata: {
-    name: string;
-  };
-};
 
 export const ChatMessages: Component = () => {
   const [files, setFiles] = useState<File[]>(() => []);
@@ -55,32 +46,30 @@ export const ChatMessages: Component = () => {
     onDrop: setFiles,
     noClick: true,
     noKeyboard: true,
+    multiple: false,
   });
 
   const saveFiles = async (chatJwk: ChatKey, messageId: string) => {
     try {
       return Promise.all(
         files.map(async (file) => {
-          const data = await readFileData(file);
+          const { path, blob } = await encryptFile(chatJwk, file);
 
-          const fileJson: FileJson = {
-            payload: data,
-            metadata: {
-              name: file.name,
-            },
-          };
-
-          const jwe = await aes.encrypt(fileJson, chatJwk, OutputFormat.Json);
-          const jweBlob = createFileBlob(jwe);
-
-          const { error } = await supabase.storage
+          const { error: storageError } = await supabase.storage
             .from("chat-files")
-            .upload(
-              `${chatId}/${messageId}/${crypto.randomUUID()}.json`,
-              jweBlob,
-            );
+            .upload(`${chatId}/${messageId}/${path}`, blob);
 
-          if (error) throw error;
+          if (storageError) throw storageError;
+
+          const { error: dbError } = await supabase
+            .from("ChatMessageFiles")
+            .insert({
+              chat_id: chatId,
+              message_id: messageId,
+              path,
+            });
+
+          if (dbError) throw dbError;
         }),
       );
     } catch (e) {
@@ -97,10 +86,11 @@ export const ChatMessages: Component = () => {
       const form = e.currentTarget;
       const formData = new FormData(form);
 
-      const message = formData.get("message")?.toString() ?? "";
-      if (!message) return;
-
-      const encryptedMessage = await aes.encrypt(message, chatJwk);
+      let encryptedMessage: string | null = null;
+      if (formData && formData.get("message")) {
+        const message = formData.get("message")?.toString() ?? "";
+        encryptedMessage = await aes.encrypt(message, chatJwk);
+      }
 
       const { data: dbMessage } = await supabase
         .from("ChatMessages")

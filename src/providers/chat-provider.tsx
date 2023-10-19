@@ -3,7 +3,7 @@ import { createCtx } from "@/lib/createCtx";
 import type {
   Chat,
   ChatMemberWithProfile,
-  ChatMessage,
+  ChatMessageWithFiles,
 } from "@/types/database";
 import { useCallback, useMemo, type PropsWithChildren } from "react";
 
@@ -11,14 +11,14 @@ type ChatContext = {
   jwk: ChatKey | null;
   getJwk: () => ChatKey;
   chat: Chat;
-  messages: ChatMessage[];
+  messages: ChatMessageWithFiles[];
   members: ChatMemberWithProfile[];
 };
 
 type Props = {
   chatKey: string;
   chat: Chat;
-  messages: ChatMessage[];
+  messages: ChatMessageWithFiles[];
   members: ChatMemberWithProfile[];
 };
 
