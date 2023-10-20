@@ -1,5 +1,7 @@
 "use client";
 
+import ImageIcon from "@/assets/image.svg";
+import { LightboxImage } from "@/components/lightbox-image";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { useChatMessageFiles } from "@/hooks/useChatMessageFiles";
 import { useDecrypt } from "@/hooks/useDecrypt";
@@ -10,7 +12,10 @@ import type {
 } from "@/types/database";
 import clsx from "clsx";
 import Image from "next/image";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+
+import Lightbox from "yet-another-react-lightbox";
+import "yet-another-react-lightbox/styles.css";
 
 interface Props {
   chatMessage: ChatMessageWithFiles;
@@ -32,35 +37,60 @@ export const MessageDisplay: Component = ({ chatMessage }) => {
   const user = useAuthUser();
 
   const decryptedMessage = useDecrypt(jwk, message);
-  const [file] = useChatMessageFiles(jwk, chatMessage);
+  const files = useChatMessageFiles(jwk, chatMessage);
+
+  const [filePreviewOpen, setFilePreviewOpen] = useState(() => false);
+  const [selectedFileIndex, setSelectedFileIndex] = useState(() => -1);
 
   const isSender = useMemo(() => sender_id === user.id, [sender_id, user.id]);
 
-  if (decryptedMessage === null && !file) return <></>;
+  if (decryptedMessage === null && !files.length) return <></>;
+
+  const handleSelectFile = (fileIndex: number) => () => {
+    setSelectedFileIndex(fileIndex);
+    setFilePreviewOpen(true);
+  };
+
+  const handleCloseLightbox = () => {
+    setFilePreviewOpen(false);
+    setSelectedFileIndex(-1);
+  };
 
   return (
     <>
       {!isSender && <p>{displaySender(sender_id, members)}</p>}
+      {files ? (
+        <Lightbox
+          index={selectedFileIndex}
+          slides={files.map((file) => ({
+            src: file.payload,
+            alt: file.metadata.name,
+          }))}
+          open={filePreviewOpen}
+          close={handleCloseLightbox}
+          render={{ slide: LightboxImage }}
+        />
+      ) : null}
       <div
         key={id}
         className={clsx(
-          // isSender ? "text-right" : "text-left",
-          "flex flex-col w-full",
-          isSender ? "justify-end" : "justify-start", // todo
+          "flex flex-col flex-wrap w-full justify-start gap-1",
+          isSender ? "content-end items-end" : "content-start items-start",
           "p-4 rounded-md",
           isSender ? "bg-primary" : "bg-white",
         )}
       >
-        {decryptedMessage}
-        {file ? (
-          <Image
-            className="aspect-auto"
-            src={file.payload}
-            alt={file.metadata.name}
-            height={250} // todo
-            width={250} // todo
-          />
-        ) : null}
+        <span>{decryptedMessage}</span>
+        {files.map((file, fileIndex) => (
+          <span
+            key={file.metadata.name}
+            className="flex flex-row gap-1"
+            onClick={handleSelectFile(fileIndex)}
+          >
+            <Image src={ImageIcon} alt="image icon" />
+            {file.metadata.name}
+          </span>
+        ))}
       </div>
     </>
   );
