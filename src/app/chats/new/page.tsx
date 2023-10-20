@@ -1,4 +1,3 @@
-import { Header } from "@/components/header";
 import { PageHeader } from "@/components/page-header";
 import { logger } from "@/lib/logger";
 import { supabase as supabaseAdmin } from "@/lib/supabase/admin";

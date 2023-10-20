@@ -1,6 +1,6 @@
 "use server";
 
-import { supabase } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/supabase/server";
 import { getAuthUser } from "@/utils/getAuthUser";
 
 import type { ChatWithKey } from "@/types/database";
@@ -12,6 +12,8 @@ type Props = {
 };
 
 const getUserChats = async (user: User) => {
+  const supabase = createServerClient();
+
   const { data } = await supabase
     .from("Chats")
     .select("*, ChatMembers(id), chatKey:UserChatKeys(key)")

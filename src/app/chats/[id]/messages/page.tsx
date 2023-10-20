@@ -1,4 +1,4 @@
-import { supabase } from "@/lib/supabase/server";
+import { createServerClient } from "@/lib/supabase/server";
 import { ChatMemberWithProfile, ChatMessageWithFiles } from "@/types/database";
 import { getAuthUser } from "@/utils/getAuthUser";
 import { notFound } from "next/navigation";
@@ -7,6 +7,8 @@ import { ChatDisplay } from "./chat-display";
 type Props = { params: { id: string } };
 
 export default async function Page({ params }: Props) {
+  const supabase = createServerClient();
+
   const { id } = params;
 
   const user = await getAuthUser();

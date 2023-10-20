@@ -15,7 +15,7 @@ export type FileJson = {
 
 const aes = new AesEncryption();
 
-export const encryptFile = async (jwk: ChatKey, file: Blob) => {
+export const encryptFile = async (jwk: ChatKey, file: File) => {
   try {
     const data = await readFileData(file);
 
