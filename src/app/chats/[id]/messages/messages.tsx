@@ -47,6 +47,7 @@ export const ChatMessages: Component = () => {
     noClick: true,
     noKeyboard: true,
     multiple: true,
+    maxFiles: 5,
   });
 
   const saveFiles = async (chatJwk: ChatKey, messageId: string) => {
