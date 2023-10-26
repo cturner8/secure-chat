@@ -83,7 +83,7 @@ export const MessageDisplay: Component = ({ chatMessage }) => {
         <span>{decryptedMessage}</span>
         {files.map((file, fileIndex) => (
           <span
-            key={file.metadata.name}
+            key={`${file.metadata.name}-${fileIndex}`}
             className="flex flex-row gap-1"
             onClick={handleSelectFile(fileIndex)}
           >

@@ -24,7 +24,7 @@ export default async function Page({ params }: Props) {
   }
   const { data: messageData } = await supabase
     .from("ChatMessages")
-    .select("*, files:ChatMessageFiles(path)")
+    .select("*, files:ChatMessageFiles(id, path)")
     .order("created_at", { ascending: true })
     .eq("chat_id", id)
     .eq("ChatMessageFiles.chat_id", id)

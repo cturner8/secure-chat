@@ -3,6 +3,7 @@
 import Attachment from "@/assets/attachment.svg";
 import Send from "@/assets/send.svg";
 import Undo from "@/assets/undo.svg";
+import { LightboxImage } from "@/components/lightbox-image";
 import { PageHeader } from "@/components/page-header";
 import { useAuthUser } from "@/hooks/useAuthUser";
 import { ChatKey } from "@/hooks/useChatKey";
@@ -14,8 +15,15 @@ import { AesEncryption } from "@/utils/encryption";
 import { encryptFile } from "@/utils/fileCrypto";
 import clsx from "clsx";
 import Image from "next/image";
-import { useState, type FormEventHandler } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type FormEventHandler,
+} from "react";
 import { useDropzone } from "react-dropzone";
+import Lightbox from "yet-another-react-lightbox";
 import { MessageList } from "./message-list";
 
 interface Props {}
@@ -25,6 +33,24 @@ const aes = new AesEncryption();
 
 export const ChatMessages: Component = () => {
   const [files, setFiles] = useState<File[]>(() => []);
+  const fileSlides = useMemo(
+    () =>
+      files.map((file) => ({ src: URL.createObjectURL(file), alt: file.name })),
+    [files],
+  );
+
+  const [filePreviewOpen, setFilePreviewOpen] = useState(() => false);
+  const [selectedFileIndex, setSelectedFileIndex] = useState(() => -1);
+
+  const openLightbox = useCallback(() => {
+    setSelectedFileIndex(0);
+    setFilePreviewOpen(true);
+  }, []);
+
+  useEffect(() => {
+    if (!files.length) return;
+    openLightbox();
+  }, [files, openLightbox]);
 
   const user = useAuthUser();
   const {
@@ -117,9 +143,23 @@ export const ChatMessages: Component = () => {
     setFiles([]);
   };
 
+  const closeLightbox = () => {
+    setFilePreviewOpen(false);
+    setSelectedFileIndex(-1);
+  };
+
   if (decryptedChatName === null) return <></>;
   return (
     <>
+      {fileSlides.length ? (
+        <Lightbox
+          index={selectedFileIndex}
+          slides={fileSlides}
+          open={filePreviewOpen}
+          close={closeLightbox}
+          render={{ slide: LightboxImage }}
+        />
+      ) : null}
       <input {...getInputProps()} />
       <div
         {...getRootProps()}
@@ -145,6 +185,15 @@ export const ChatMessages: Component = () => {
               placeholder="Type a message..."
               className="bg-transparent border-none focus:outline-none w-max grow"
             />
+            {files.length ? (
+              <button
+                type="button"
+                onClick={openLightbox}
+                className="bg-primary rounded-full w-8 h-8 my-auto mx-3"
+              >
+                {files.length}
+              </button>
+            ) : null}
             <div className="w-30 flex flex-row justify-end px-2 gap-2 border-l-2 border-black-200">
               <button type="button" onClick={openFilePicker}>
                 <Image src={Attachment} alt="attach file" />

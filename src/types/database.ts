@@ -10,7 +10,7 @@ export type ChatMessage = Database["public"]["Tables"]["ChatMessages"]["Row"];
 export type ChatMessageFiles =
   Database["public"]["Tables"]["ChatMessageFiles"]["Row"];
 export type ChatMessageWithFiles = ChatMessage & {
-  files: Array<Pick<ChatMessageFiles, "path">>;
+  files: Array<Pick<ChatMessageFiles, "id" | "path">>;
 };
 export type ChatMessageWithSender = ChatMessage & {
   sender: Pick<UserProfile, "email" | "firstname" | "lastname">;
