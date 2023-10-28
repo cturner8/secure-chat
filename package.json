@@ -6,20 +6,39 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "supabase": "supabase",
+    "compile": "tsc --noEmit"
   },
   "dependencies": {
+    "@supabase/auth-helpers-nextjs": "^0.8.1",
+    "@supabase/auth-ui-react": "^0.4.5",
+    "@supabase/auth-ui-shared": "^0.1.7",
+    "@supabase/supabase-js": "^2.36.0",
     "@types/node": "18.x",
     "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.16",
-    "eslint": "8.50.0",
-    "eslint-config-next": "13.5.2",
-    "next": "13.5.4",
+    "clsx": "^2.0.0",
+    "eslint": "^8.51.0",
+    "eslint-config-next": "^13.5.3",
+    "jose": "^4.14.6",
+    "localforage": "^1.10.0",
+    "loglevel": "^1.8.1",
+    "next": "^13.5.6",
     "postcss": "8.4.31",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-dropzone": "^14.2.3",
     "tailwindcss": "3.3.3",
-    "typescript": "5.2.2"
+    "typescript": "5.2.2",
+    "yet-another-react-lightbox": "^3.14.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/container-queries": "^0.1.1",
+    "@tailwindcss/forms": "^0.5.6",
+    "@tailwindcss/typography": "^0.5.10",
+    "supabase": "^1.99.5"
   }
 }
