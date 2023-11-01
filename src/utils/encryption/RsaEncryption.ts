@@ -16,7 +16,8 @@ export class RsaEncryption extends Encryption {
     this.signAlg = "PS256";
   }
 
-  generateKeyPair = () => jose.generateKeyPair<CryptoKey>(this.alg);
+  generateKeyPair = (extractable = false) =>
+    jose.generateKeyPair<CryptoKey>(this.alg, { extractable });
 
   generateSigningKeyPair = () => jose.generateKeyPair<CryptoKey>(this.signAlg);
 

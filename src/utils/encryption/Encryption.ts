@@ -98,4 +98,14 @@ export class Encryption {
     const jwk = typeof key === "string" ? this.fromBase64<JWK>(key) : key;
     return jose.importJWK<CryptoKey>(jwk, this.alg);
   };
+
+  public wrapKey = async (key: Key, wrappingKey: Key) => {
+    const jwk = await this.exportKey(key);
+    return this.encrypt(jwk, wrappingKey);
+  };
+
+  public unwrapKey = async (key: string, wrappingKey: Key) => {
+    const jwk = await this.decrypt(key, wrappingKey);
+    return this.importKey(jwk);
+  };
 }
