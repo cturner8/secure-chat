@@ -94,8 +94,8 @@ export class Encryption {
     return jose.exportJWK(key);
   };
 
-  public importKey = async (key: JWK | string) => {
+  public importKey = async (key: JWK | string, ext = false) => {
     const jwk = typeof key === "string" ? this.fromBase64<JWK>(key) : key;
-    return jose.importJWK<CryptoKey>(jwk, this.alg);
+    return jose.importJWK<CryptoKey>({ ...jwk, ext }, this.alg);
   };
 }
