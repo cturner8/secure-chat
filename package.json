@@ -22,7 +22,7 @@
     "clsx": "^2.0.0",
     "eslint": "^8.53.0",
     "eslint-config-next": "^14.0.1",
-    "jose": "^5.0.1",
+    "jose": "^5.0.2",
     "localforage": "^1.10.0",
     "loglevel": "^1.8.1",
     "next": "^14.0.1",
